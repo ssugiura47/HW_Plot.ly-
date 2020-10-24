@@ -72,6 +72,27 @@ function init(){
                     
         Plotly.newPlot('bubble', [bubbleData], bubbleLayout);
         });
+    var two = 2
+    d3.json("data/samples.json").then((data) => {
+        var subjectID = data["metadata"][0]["id"]
+        var subjectEth = data["metadata"][0]["ethnicity"]
+        var subjectGen = data["metadata"][0]["gender"]
+        var subjectAge = data["metadata"][0]["age"]
+        var subjectLoc = data["metadata"][0]["location"]
+        var subjectBB = data["metadata"][0]["bbtype"]
+        var subjectWF = data["metadata"][0]["wfreq"]
+
+        d3.select("#sample-metadata").append("div")
+            .text(`ID: ${subjectID}`)
+            .append("div").text(`Ethnicity: ${subjectEth}`)
+            .append("div").text(`Gender: ${subjectGen}`)
+            .append("div").text(`Age: ${subjectAge}`)
+            .append("div").text(`Location: ${subjectLoc}`)
+            .append("div").text(`BBType: ${subjectBB}`)
+            .append("div").text(`WFrequence: ${subjectWF}`)
+
+    });
+
 };
 
 // function table(){
