@@ -12,17 +12,68 @@ function getData(){
         var allsubjects = data.metadata
         console.log(allsubjects)
 
-    subjectIDs = allsubjects.map(d => d.id)
+    var subjectIDs = allsubjects.map(d => d.id)
     console.log(subjectIDs)
+    
+    var dropdown = d3.select("#selDataset");
+    // var dataset = dropdown.node().value;
+    // var chart = d3.selectAll("#bar").node();
 
     for (var i = 0; i < 153; i++){
-        var option = d3.select("#selDataset").append("option");
+        var option = dropdown.append("option");
         option.append("value").text(subjectIDs[i])
         }  
+
     });
 };
 
-getData()
+function init(){
+    d3.json("data/samples.json").then((data) => {
+        var sampleValues = data["samples"][0]["sample_values"]
+        var otu_ids = "OTU " + data["samples"][0]["otu_ids"]
+        var otu_labels = data["samples"][0]["otu_labels"]
+
+        var topTenValues = sampleValues.slice(0,10);
+        var topTenIDs = otu_ids.slice(0,10);
+        var topTenLabels = otu_labels.slice(0,10);
+
+        var data = {
+                y: topTenIDs,
+                x: topTenValues,
+                type: "bar",
+                text: topTenLabels
+                }
+                var layout = {
+                title: "Top 10 OTUs"
+                }
+            Plotly.newPlot("bar", [data], layout)
+        });
+        
+    d3.json("data/samples.json").then((data) => {
+        var sampleValues = data["samples"][0]["sample_values"]
+        var otu_ids = data["samples"][0]["otu_ids"]
+        var otu_labels = data["samples"][0]["otu_labels"]
+                    
+        var bubbleData = {
+            x: otu_ids,
+            y: sampleValues,
+            text: otu_labels,
+            mode: `markers`,
+            marker: {
+                size: sampleValues, 
+                color: otu_ids
+                }
+            };
+                
+        var bubbleLayout = {
+            xaxis: {title: "OTU ID"}, 
+            title: "Belly Button Bacteria"
+            };
+                    
+        Plotly.newPlot('bubble', [bubbleData], bubbleLayout);
+        });
+};
+
 // function table(){
 
 //     d3.json("data/samples.json").then((data) => {
@@ -45,28 +96,10 @@ getData()
 // }
 //     Plotly.newPlot("bar", [data], layout)
  
-// d3.json("data/samples.json").then((data) => {
-//     var sampleValues = data["samples"][0]["sample_values"]
-//     var otu_ids = data["samples"][0]["otu_ids"]
-//     var otu_labels = data["samples"][0]["otu_labels"]
-    
-//     var bubbleData = {
-//         x: otu_ids,
-//         y: sampleValues,
-//         text: otu_labels,
-//         mode: `markers`,
-//         marker: {
-//           size: sampleValues, 
-//           color: otu_ids
-//         }
-//     };
-
-//     var bubbleLayout = {
-//         xaxis: {title: "OTU ID"}, 
-//         title: "Belly Button Bacteria"
-//       };
-    
-//     Plotly.newPlot('bubble', [bubbleData], bubbleLayout);
+// 
 // });
 
 // top10dropdown();
+
+getData()
+init()
