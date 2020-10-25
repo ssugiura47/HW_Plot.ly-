@@ -146,19 +146,24 @@ function updatePlotly(id) {
 
         var result_topTenValues = resultSampleValues.slice(0,10);
         var result_topTenIDs = result_otu_ids.slice(0,10);
+        var result_topOTUIDs = result_topTenIDs.map(d => `OTU ${d}`);
         var result_topTenLabels = result_otu_labels.slice(0,10);
 
-        var data = {
-                y: result_topTenValues,
-                x: result_topTenIDs,
-                type: "bar",
-                text: result_topTenLabels
-                }
-                var layout = {
-                title: "Top 10 OTUs"
-                }
-                
-        Plotly.newPlot("bar", [data], layout)
+        var result_data = {
+            x: result_topTenValues,
+            y: result_topOTUIDs,
+            type: "bar",
+            text: result_topTenLabels
+            };
+
+        var layout = {
+            title: "Top 10 OTUs",
+            yaxis: result_topOTUIDs
+            };
+     
+
+        Plotly.restyle("bar", "y", [result_topOTUIDs]);
+        Plotly.restyle("bar", "x", [result_topTenValues]);
     })
 
   });
